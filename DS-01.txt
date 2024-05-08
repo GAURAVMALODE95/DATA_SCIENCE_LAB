@@ -1,0 +1,25 @@
+import numpy as np
+import pandas as pd
+
+"""# read the csv file"""
+
+data= pd.read_csv('vehicles (1).csv')
+
+data
+
+data.isnull().sum()
+
+data.describe()
+
+data.columns
+
+data.shape
+
+data.ndim
+
+data.info()
+
+duplicate_value = data[data.duplicated()]
+print(duplicate_value)
+
+data.drop_duplicates()

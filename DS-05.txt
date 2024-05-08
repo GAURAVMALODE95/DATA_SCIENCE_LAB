@@ -1,0 +1,90 @@
+
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
+
+df=pd.read_csv('Social_Network_Ads.csv')
+
+df.head()
+
+df.describe()
+
+df.isnull().sum()
+
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+df['Gender'] = encoder.fit_transform(df['Gender'])
+
+df.head()
+
+x =df.drop(columns=['Purchased'])
+y=df['Purchased']
+
+x
+
+y
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+logreg = LogisticRegression()
+
+print(x_train.shape)
+print(x_test.shape)
+
+logreg.fit(x_train,y_train)
+
+y_pred=logreg.predict(x_test)
+
+Accuracy = accuracy_score(y_test, y_pred)
+print("prediction:",y_pred)
+
+cm = confusion_matrix(y_test, y_pred)
+precession=precision_score(y_test, y_pred)
+recall=recall_score(y_test, y_pred)
+f1=f1_score(y_test, y_pred)
+Accuracy=accuracy_score(y_test, y_pred)
+
+print("confussion matrix:",cm)
+print("precession:",precession)
+print("recall:",recall)
+print("f1:",f1)
+print("Accuracy:",Accuracy)
+
+
+
+
+
+
+
+''''''''
+Logistic regression is a statistical method used for binary classification tasks, where the goal is to predict the probability that an instance belongs to one of two classes. It's called "regression" because it predicts the probability of a binary outcome, but it's not the same as linear regression, which predicts continuous values.
+
+Here's how it works:
+
+Sigmoid Function: Logistic regression uses the logistic function (or sigmoid function) to model the probability that a given input belongs to a particular class. The sigmoid function maps any real-valued number to a value between 0 and 1, making it suitable for representing probabilities. The formula for the sigmoid function is:
+�
+(
+�
+)
+=
+1
+1
++
+�
+−
+�
+g(z)= 
+1+e 
+−z
+ 
+1
+​
+ where 
+�
+z is a linear combination of the input features and their corresponding weights.
+Decision Boundary: Logistic regression finds the best-fitting line (or hyperplane in higher dimensions) that separates the two classes in the feature space. This line is called the decision boundary. The decision boundary is determined by the weights assigned to each feature and the bias term.
+Training: During training, logistic regression adjusts the weights and bias iteratively to minimize the difference between the predicted probabilities and the actual class labels in the training data. This is typically done using optimization algorithms like gradient descent.
+Cost Function: The cost function used in logistic regression is based on the likelihood of the observed data given the model parameters. The goal is to maximize the likelihood of the training data, which is equivalent to minimizing the logistic loss or cross-entropy loss.
+Regularization: To prevent overfitting, logistic regression can be regularized by adding a penalty term to the cost function. This penalty discourages large weights, which can lead to overly complex models.
+Overall, logistic regression is a simple yet powerful algorithm for binary classification tasks, widely used in various fields such as finance, healthcare, and marketing.'''''''

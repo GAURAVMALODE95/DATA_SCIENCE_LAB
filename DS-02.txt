@@ -1,0 +1,193 @@
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+data=pd.read_csv('tecdiv (1).csv')
+data
+
+data.describe()
+
+data.info()
+
+data.columns
+
+data.shape
+
+data.isnull().sum()
+
+"""# Outlier
+method-1:by box-plotting
+"""
+
+#for First year:   Sem 1
+Q1 = np.percentile(data['First year:   Sem 1'], 25)
+Q3 = np.percentile(data['First year:   Sem 1'], 75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = (data['First year:   Sem 1'] < lower_bound) | (data['First year:   Sem 1'] > upper_bound)
+print("outlier:",outliers)
+A=outliers.sum()
+if A==0:
+    print("no outlier")
+else:
+    print("outlier is present")
+
+#First year:   Sem 2
+Q1 = np.percentile(data['First year:   Sem 2'], 25)
+Q3 = np.percentile(data['First year:   Sem 2'], 75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = (data['First year:   Sem 2'] < lower_bound) | (data['First year:   Sem 2'] > upper_bound)
+print("outlier:",outliers)
+A=outliers.sum()
+if A==0:
+    print("no outlier")
+else:
+    print("outlier is present")
+
+#Second year:   Sem 1
+Q1 = np.percentile(data['Second year:   Sem 1'], 25)
+Q3 = np.percentile(data['Second year:   Sem 1'], 75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = (data['Second year:   Sem 1'] < lower_bound) | (data['Second year:   Sem 1'] > upper_bound)
+print("outlier:",outliers)
+A=outliers.sum()
+if A==0:
+    print("no outlier")
+else:
+    print("outlier is present")
+
+#Second year:   Sem 2
+Q1 = np.percentile(data['Second year:   Sem 2'], 25)
+Q3 = np.percentile(data['Second year:   Sem 2'], 75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = (data['Second year:   Sem 2'] < lower_bound) | (data['Second year:   Sem 2'] > upper_bound)
+print("outlier:",outliers)
+A=outliers.sum()
+if A==0:
+    print("no outlier")
+else:
+    print("outlier is present")
+
+"""# Tranformtion"""
+
+data.columns
+
+x = data['First year:   Sem 1']
+y = data['First year:   Sem 2']
+
+plt.figure(figsize=(8, 6))
+plt.scatter(x, y)
+plt.xlabel('First year:   Sem 1')
+plt.ylabel('First year:   Sem 2')
+plt.title('Original Non-linear Relationship')
+plt.grid(True)
+plt.show()
+
+transformed_x = np.sqrt(x)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(transformed_x, y)
+plt.xlabel('First year:   Sem 1')
+plt.ylabel('First year:   Sem 2')
+plt.title('Transformed Linear Relationship')
+plt.grid(True)
+plt.show()
+
+"""# Transformation
+2.decrease Skewness
+"""
+
+variable_to_transform = 'Second year:   Sem 1'
+
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1)
+sns.histplot(data[variable_to_transform], kde=True)
+plt.title('Original Data')
+
+data['log_transformed_variable'] = np.log(data[variable_to_transform] + 1)
+
+plt.subplot(1, 2, 2)
+sns.histplot(data['log_transformed_variable'], kde=True)
+plt.title('Log-Transformed Data')
+
+plt.tight_layout()
+plt.show()
+
+"""# Transformation
+3.convert Distribution to normal Distribution
+"""
+
+# this for first year sem1
+from scipy.stats import boxcox
+
+numeric_columns = ['First year:   Sem 1']
+
+transformed_data = pd.DataFrame()
+for column in numeric_columns:
+    transformed_col, _ = boxcox(data[column] + 1)
+    transformed_data[column] = transformed_col
+
+
+sns.histplot(transformed_data, kde=True)
+plt.show()
+
+transformed_data.to_csv('transformed_tecdiv.csv', index=False)
+
+# this for first year sem1
+from scipy.stats import boxcox
+
+numeric_columns = ['First year:   Sem 2']
+
+transformed_data = pd.DataFrame()
+for column in numeric_columns:
+    transformed_col, _ = boxcox(data[column] + 1)
+    transformed_data[column] = transformed_col
+
+
+sns.histplot(transformed_data, kde=True)
+plt.show()
+
+transformed_data.to_csv('transformed_tecdiv.csv', index=False)
+
+# this for second year sem1
+from scipy.stats import boxcox
+
+numeric_columns = ['Second year:   Sem 1']
+
+transformed_data = pd.DataFrame()
+for column in numeric_columns:
+    transformed_col, _ = boxcox(data[column] + 1)
+    transformed_data[column] = transformed_col
+
+
+sns.histplot(transformed_data, kde=True)
+plt.show()
+
+transformed_data.to_csv('transformed_tecdiv.csv', index=False)
+
+# this for second year sem2
+from scipy.stats import boxcox
+
+numeric_columns = ['Second year:   Sem 2']
+
+transformed_data = pd.DataFrame()
+for column in numeric_columns:
+    transformed_col, _ = boxcox(data[column] + 1)
+    transformed_data[column] = transformed_col
+
+
+sns.histplot(transformed_data, kde=True)
+plt.show()
+
+transformed_data.to_csv('transformed_tecdiv.csv', index=False)
+

@@ -1,0 +1,32 @@
+
+import pandas as pd
+import seaborn as sns
+
+data=pd.read_csv("Titanic-Dataset.csv")
+
+data
+
+features=data.columns
+print(features)
+
+"""# Plot pairwise relationships between features"""
+
+for feature in features:
+    sns.pairplot(data, vars=[feature])
+    plt.show()
+
+"""# Age Distribution"""
+
+sns.histplot(data['Age'], bins=20, kde=True)
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Count')
+plt.show()
+
+"""# check how the price of the ticket (column name: 'fare') for each passenger is distributed by plotting a histogram."""
+
+sns.histplot(data['Fare'], bins=30, kde=True)
+plt.title('Distribution of Ticket Prices')
+plt.xlabel('Fare')
+plt.ylabel('Count')
+plt.show()

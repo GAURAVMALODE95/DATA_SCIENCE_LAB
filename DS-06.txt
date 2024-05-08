@@ -1,0 +1,111 @@
+
+
+import numpy as np
+import pandas as pd
+
+data=pd.read_csv("Iris.csv")
+
+data
+
+data.shape
+
+data.describe()
+
+data.info()
+
+data.isnull().sum()
+
+data.columns
+
+"""# Convert Categorical to Numerical Values for species"""
+
+data
+
+import numpy as np
+from sklearn.preprocessing import OrdinalEncoder
+d1_reshaped = data['Species'].values.reshape(-1, 1)
+encoder = OrdinalEncoder()
+encoded_data = encoder.fit_transform(d1_reshaped).astype(int)
+
+df=pd.DataFrame(encoded_data)
+
+data.drop(columns=['Species'], inplace=True)
+
+data
+
+df
+
+concatenated_data = pd.concat([data, df], axis=1)
+
+concatenated_data
+
+concatenated_data.isnull().sum()
+
+"""# divide dataset in two variable(independent and dependent)"""
+
+concatenated_data.columns
+
+concatenated_data.rename(columns={0: 'new_species'}, inplace=True)
+
+concatenated_data
+
+concatenated_data.columns
+
+X_ind = concatenated_data[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']]
+Y_dep = concatenated_data['new_species']
+
+"""# Split the dataset into training and testing datasets
+
+"""
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(X_ind, Y_dep, test_size=0.2, random_state=42)
+
+"""# Use Naive Bayes algorithm( Train the Machine ) to Create Model"""
+
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score,precision_score, recall_score,confusion_matrix
+naive_bayes_model = GaussianNB()
+naive_bayes_model.fit(x_train, y_train)
+y_pred = naive_bayes_model.predict(x_test)
+accuracy = accuracy_score(y_test, y_pred)*100
+precision =precision_score(y_test, y_pred,average='micro')
+recall = recall_score(y_test, y_pred,average='micro')
+cm = confusion_matrix(y_test, y_pred)
+print("predicted value:",y_pred)
+print("Accuracy:", accuracy,"%")
+print("precision:",precision)
+print("recall:",recall)
+print("confusion matrix:")
+print(cm)
+
+
+
+
+Naive Bayes is a classification algorithm based on Bayes' theorem, a fundamental concept in probability theory. It's called "naive" because it makes a simplifying assumption: it assumes that all features are independent of each other given the class label. This means it treats each feature as if it contributes independently to the probability of a certain class.
+
+Here's a more intuitive explanation of how Naive Bayes works:
+
+Training Phase:
+During training, Naive Bayes learns the probability distributions of the features for each class in the dataset.
+It calculates how often each feature occurs in each class and stores this information.
+Prediction Phase:
+When given a new instance with features, Naive Bayes calculates the probability of each class given the observed features using Bayes' theorem.
+It assumes that the occurrence of each feature is independent of the others, given the class.
+The class with the highest probability is then predicted as the output for the given instance.
+Example:
+Suppose we have a dataset of emails labeled as spam or not spam, and each email has features such as the presence or absence of certain words.
+During training, Naive Bayes calculates the probability of each word occurring in spam and non-spam emails.
+When given a new email, Naive Bayes calculates the probability that it belongs to each class based on the presence or absence of words in the email.
+It then predicts the class (spam or not spam) with the highest probability.
+Naive Bayes is popular for its simplicity, efficiency, and effectiveness, especially in text classification tasks like spam detection, sentiment analysis, and document categorization. Despite its "naive" assumption, it often performs well in practice, especially on datasets with a large number of features.
+
+
+
+
+
+
+
+
+
+
